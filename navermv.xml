@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs
+    title="Naver Movie Ticker"
+    description=""
+    author="d3m3vilurr"
+    author_email="d3m3vilurr@gmail.com"
+    screenshot=""
+    thumbnail=""
+    author_affiliation=""
+    author_location="Korea"
+    author_link="http://d3m3vilurr.tistory.com/"
+  />
+  <Content type="html"><![CDATA[
+
+    <!-- Include jQuery because it makes scripting easier -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+    <style type="text/css">
+
+    </style>
+
+    <script type="text/javascript">  
+      var prefs__MODULE_ID__ = new _IG_Prefs(__MODULE_ID__);
+    </script>
+
+    <div id="view_ticker">
+      test
+    </div>
+    
+    <script type="text/javascript">
+      $.get('http://movie.naver.com/hotmovieflash.xml', function(s,d,r) {
+        alert(s);
+        alert(d);
+        alert(r);
+      });
+    </script>
+  ]]></Content>
+</Module>
+
+

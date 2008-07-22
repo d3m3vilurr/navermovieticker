@@ -27,12 +27,27 @@
       test
     </div>
     
-    <script type="text/javascript">
-      $.get('http://movie.naver.com/hotmovieflash.xml', function(s,d,r) {
-        alert(s);
-        alert(d);
-        alert(r);
-      });
+    <script type="text/javascript">      
+      var url = 'http://movie.naver.com/hotmovieflash.xml';
+     _IG_FetchContent(url, function(e) {
+        var txt = ''
+        $(e).find('movie').each(function() {
+          txt += '<div class="item">';
+          txt += '  <div class="title">' + $(this).attr('title') + '</div>';
+          txt += '  <div class="genre">' + $(this).attr('genre') + '</div>';
+          txt += '  <div class="showtime">' + $(this).attr('showtime') + '∫–</div>';
+          txt += '  <div class="opendate">∞≥∫¿¿œ:' + $(this).attr('opendate') + '</div>';
+          //txt += '  <div class="link">' + $(this).attr('link') + '</div>';
+          //txt += '  <div class="ratelink">' + $(this).attr('ratelink') + '</div>';
+          txt += '  <div class="user_comment">';
+          $(this).children().each(function() {
+            txt += '      <div class="comment">' + $(this).html().replace('<!--[CDATA[', '').replace(']]-->', '') + '</div>';
+          });
+          txt += '  </div>';
+          txt += '</div>';
+        });
+        $('#view_ticker').html(txt);
+     });
     </script>
   ]]></Content>
 </Module>

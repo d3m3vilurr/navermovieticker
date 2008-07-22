@@ -16,7 +16,65 @@
     <!-- Include jQuery because it makes scripting easier -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
     <style type="text/css">
-
+      html {
+        padding: 5px;
+      }
+      .item {
+        margin-bottom: 5px;
+      }
+      
+      .entry {
+        clear: both;
+        border-top: 1px solid #aaaaaa;
+        border-bottom: 1px solid #aaaaaa;
+        background: #dddddd;
+        width: 100%;
+        height: 15px;
+      }
+      
+      .title {
+        font-weight: bold;
+        font-size: 12px;
+        float: left;
+      }
+      
+      .ratepoint {
+        float: right;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .info, .user_comment {
+        font-size: 11px;
+        display: none;
+      }
+      .toggle {
+        width: 12px;
+        height: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        float: left;
+        margin-top: 2px;
+        margin-left: 2px;
+        margin-right: 5px;
+      }
+      .toggle .bg {
+        background: url('http://img0.gmodules.com/ig/images/sprite_arrow_enlarge_max_min_shrink_x_blue.gif');
+        width: 200px;
+        height: 100px;   
+        margin-top: -24px;
+      }
+      
+      .info {
+        clear: both;
+        border: 1px solid gray;
+        float: right;
+        margin-top: 5px;
+        margin-right: 5px;
+        padding: 5px;
+      }
+      .on .bg {
+        margin-left: -12px;
+      }
     </style>
 
     <script type="text/javascript">  
@@ -24,29 +82,56 @@
     </script>
 
     <div id="view_ticker">
-      test
     </div>
     
     <script type="text/javascript">      
       var url = 'http://movie.naver.com/hotmovieflash.xml';
      _IG_FetchContent(url, function(e) {
         var txt = ''
-        $(e).find('movie').each(function() {
+        $(e).find('movie').each(function(i, e) {
           txt += '<div class="item">';
-          txt += '  <div class="title">' + $(this).attr('title') + '</div>';
-          txt += '  <div class="genre">' + $(this).attr('genre') + '</div>';
-          txt += '  <div class="showtime">' + $(this).attr('showtime') + '∫–</div>';
-          txt += '  <div class="opendate">∞≥∫¿¿œ:' + $(this).attr('opendate') + '</div>';
-          //txt += '  <div class="link">' + $(this).attr('link') + '</div>';
-          //txt += '  <div class="ratelink">' + $(this).attr('ratelink') + '</div>';
-          txt += '  <div class="user_comment">';
+          txt += '  <div class="entry">';
+          txt += '    <div class="toggle" id="i'+i+'"><div class="bg"></div></div>';
+          txt += '    <div class="title"><a href="'+ $(this).attr('link') +'" title="">' + $(this).attr('title') + '</a></div>';
+          txt += '    <div class="ratepoint"><a href="'+ $(this).attr('ratelink') +'" title="">' + $(this).attr('ratepoint') + '</a></div>';
+          txt += '  </div>';
+          txt += '  <div class="info" id="info_'+i+'">';
+          txt += '    <div class="genre">' + $(this).attr('genre') + '</div>';
+          txt += '    <div class="showtime">' + $(this).attr('showtime') + '∫–</div>';
+          txt += '    <div class="opendate">∞≥∫¿¿œ:' + $(this).attr('opendate') + '</div>';
+          txt += '  </div>';
+          txt += '  <div class="user_comment" id="uc_'+i+'">';
+          txt += '    <ol>'
           $(this).children().each(function() {
-            txt += '      <div class="comment">' + $(this).html().replace('<!--[CDATA[', '').replace(']]-->', '') + '</div>';
+            txt += '      <li class="comment">' + $(this).html().replace('<!--[CDATA[', '').replace(']]-->', '') + '</li>';
           });
+          txt += '    </ol>';
           txt += '  </div>';
           txt += '</div>';
         });
         $('#view_ticker').html(txt);
+
+        $('.toggle').click(function() {
+          if(!$(this).hasClass('on')) {
+            $('.info').hide();
+            $('.user_comment').hide();
+            $('.toggle').removeClass('on');
+          }
+          var id = $(this).attr('id').match(/\d+/)[0];
+          $('#info_'+id).toggle();
+          $('#uc_'+id).toggle();
+          if($(this).hasClass('on'))
+            $(this).removeClass('on');
+          else
+            $(this).addClass('on');
+        });
+
+        $('.toggle').mouseover(function () {
+          $(this).find('.bg').css('margin-top', '-36px');
+        });
+        $('.toggle').mouseout(function() {
+          $(this).find('.bg').css('margin-top', '-24px');
+        });
      });
     </script>
   ]]></Content>

@@ -92,8 +92,8 @@
           txt += '<div class="item">';
           txt += '  <div class="entry">';
           txt += '    <div class="toggle" id="i'+i+'"><div class="bg"></div></div>';
-          txt += '    <div class="title"><a href="http://movie.naver.com'+ $(this).attr('link') +'" title="" target="_blank">' + $(this).attr('title') + '</a></div>';
-          txt += '    <div class="ratepoint"><a href="http://movie.naver.com'+ $(this).attr('ratelink') +'" title="" target="_blank">' + $(this).attr('ratepoint') + '</a></div>';
+          txt += '    <div class="title"><a href="http://movie.naver.com'+ $(this).attr('link') +'" title="">' + $(this).attr('title') + '</a></div>';
+          txt += '    <div class="ratepoint"><a href="http://movie.naver.com'+ $(this).attr('ratelink') +'" title="">' + $(this).attr('ratepoint') + '</a></div>';
           txt += '  </div>';
           txt += '  <div class="info" id="info_'+i+'">';
           txt += '    <div class="genre">' + $(this).attr('genre') + '</div>';
@@ -109,9 +109,11 @@
           txt += '  </div>';
           txt += '</div>';
         });
-        $('#view_ticker').html(txt);
+	$('#view_ticker').html(txt);
 
-        $('.toggle').click(function() {
+        $('a').attr('target', '_blank');
+	
+	$('.toggle').click(function() {
           if(!$(this).hasClass('on')) {
             $('.info').hide();
             $('.user_comment').hide();

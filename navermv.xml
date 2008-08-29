@@ -14,7 +14,7 @@
   <Content type="html"><![CDATA[
 
     <!-- Include jQuery because it makes scripting easier -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+    <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.pack.js"></script>
     <style type="text/css">
       html {
         padding: 5px;
@@ -87,7 +87,7 @@
     <script type="text/javascript">      
       var url = 'http://movie.naver.com/hotmovieflash.xml';
      _IG_FetchContent(url, function(e) {
-        var txt = ''
+        var txt = '';
         $(e).find('movie').each(function(i, e) {
           txt += '<div class="item">';
           txt += '  <div class="entry">';
@@ -109,11 +109,11 @@
           txt += '  </div>';
           txt += '</div>';
         });
-	$('#view_ticker').html(txt);
+        $('#view_ticker').html(txt);
 
         $('a').attr('target', '_blank');
 	
-	$('.toggle').click(function() {
+        $('.toggle').click(function() {
           if(!$(this).hasClass('on')) {
             $('.info').hide();
             $('.user_comment').hide();
@@ -138,6 +138,4 @@
     </script>
   ]]></Content>
 </Module>
-
-
 

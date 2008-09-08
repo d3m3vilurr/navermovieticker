@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs
+    title="Naver Movie Ticker"
+    description=""
+    author="d3m3vilurr"
+    author_email="d3m3vilurr@gmail.com"
+    screenshot=""
+    thumbnail=""
+    author_affiliation=""
+    author_location="Korea"
+    author_link="http://d3m3vilurr.tistory.com/"
+  />
+  <Content type="html"><![CDATA[
+
+    <!-- Include jQuery because it makes scripting easier -->
+    <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.pack.js"></script>
+    <style type="text/css">
+      html {
+        padding: 5px;
+      }
+      span {
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+      .item {
+        margin-bottom: 5px;
+      }
+      
+      .entry {
+        clear: both;
+        border-top: 1px solid #aaaaaa;
+        border-bottom: 1px solid #aaaaaa;
+        background: #dddddd;
+        width: 100%;
+        height: 15px;
+      }
+      
+      .title {
+        font-weight: bold;
+        font-size: 12px;
+        float: left;
+      }
+      
+      .reserve {
+        float: right;
+        font-size: 12px;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+      .info, .user_comment {
+        font-size: 11px;
+        display: none;
+      }
+      .toggle {
+        width: 12px;
+        height: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        float: left;
+        margin-top: 2px;
+        margin-left: 2px;
+        margin-right: 5px;
+      }
+      .toggle .bg {
+        background: url('http://img0.gmodules.com/ig/images/sprite_arrow_enlarge_max_min_shrink_x_blue.gif');
+        width: 200px;
+        height: 100px;   
+        margin-top: -24px;
+      }
+      
+      .info {
+        clear: both;
+        border: 1px solid gray;
+        float: right;
+        width: 100%;
+        margin-top: 5px;
+        margin-right: 5px;
+        padding: 5px;
+      }
+      
+      .info .poster {
+        float: left;
+      }
+      .on .bg {
+        margin-left: -12px;
+      }
+    </style>
+
+    <script type="text/javascript">  
+      var prefs__MODULE_ID__ = new _IG_Prefs(__MODULE_ID__);
+    </script>
+
+    <div id="view_ticker">
+    </div>
+    
+    <script type="text/javascript">      
+      var baseurl = 'http://movie.naver.com';
+      var url = 'http://movie.naver.com/movie/sdb/rank/rboxoffice.nhn?cur=0&nation=kor';
+
+      function detail(e, type) {
+        var detail_info = '';
+        e.find('a').not('a:has(img)').not('.more_inline').each(function(e) {
+          var url = baseurl + $(this).attr('href');
+          var name = $(this).text();
+          detail_info += '<span class="'+type+'"><a href="'+url+'">' + name + '</a></span>';
+        });
+        return detail_info;
+      }
+      
+      function detail_load(url, target) {
+        if (target.hasClass('loaded')) {
+          target.show('fast'); return;
+        }
+
+        _IG_FetchContent(url, function(d) {
+          // movie poster
+          var poster = $(d).find('.poster img').attr('src');
+
+          // TODO: get star_point;
+          
+          var summary = $(d).find('.summary dd');
+          
+          // info
+          var info = detail(summary.eq(0), 'basic_info');
+          
+          // director
+          var director = detail(summary.eq(1), 'director');
+          
+          // actor
+          // TODO: print actor part
+          var actor = detail(summary.eq(2), 'actor');
+          
+          // grade
+          // TODO: print accept area
+          var grade = detail(summary.eq(3), 'grade');
+          
+          var html = '';
+          html += '<div class="poster"><img height="151" width="105" src="'+poster+'" alt="poster" /></div>';
+          html += '<div class="basic_info">기본정보 : ' + info + '</div>';
+          html += '<div class="areas">지역 : </div>';
+          html += '<div class="open">개봉일 : </div>';
+          html += '<div class="director">감독 : ' + director + '</div>';
+          html += '<div class="actor">배우 : ' + actor + '</div>';
+          html += '<div class="grade">상영등급 : ' + grade + '</div>';
+          target.html(html);
+          
+          var last = target.find('.basic_info span:last'); // month-day
+          var open = last.clone();
+          last.remove();
+          last = target.find('.basic_info span:last'); // year
+          target.find('.open').append(
+            '<span class="date">'+last.html()+'</span><span class="date">'+open.html()+'</span>'
+          );
+          last.remove();
+          open.remove();
+          
+          last = target.find('.basic_info span:last'); // area
+          target.find('.areas').append(
+            '<span class="area">'+last.html()+'</span>'
+          );
+          last.remove();
+          
+          target.addClass('loaded');
+          target.show('fast');
+        });
+      }
+      
+      _IG_FetchContent(url, function(e) {
+        var txt = '';
+        var boxoffice = $(e).find('.list_ranking:not(.bt_8e8e8e)') // current list
+                            .find('tr:has(td.title)');             // boxoffice list
+         
+        boxoffice.each(function(i, e) {
+          var movie_url = baseurl + $(this).find('.title a').attr('href');
+          var title = $(this).find('.title').text();
+          var date = $(this).find('.number').text();
+          var reserve_per = $(this).find('.reserve_per').text();
+          var ticket_url = baseurl + $(this).find('.ac a').attr('href');
+
+          txt += '<div class="item">';
+          txt += '  <div class="entry">';
+          txt += '    <div class="toggle" id="i'+i+'"><div class="bg"></div></div>';
+          txt += '    <div class="title">';
+          txt += '      <a href="' + movie_url +'" title="' + title + '">' + title + '</a>';
+          txt += '    </div>';
+          txt += '    <div class="reserve">';
+          txt += '      <a href="'+ ticket_url +'" title="예매하기">' + reserve_per + '</a>';
+          txt += '  </div>';
+          txt += '  </div>';
+          
+          txt += '  <div class="info" id="info_'+i+'" movie_url="'+movie_url+'">';
+          //txt += '    <div class="basic_info">' + info + '</div>';
+          //txt += '    <div class="showtime">' + $(this).attr('showtime') + '분</div>';
+          //txt += '    <div class="opendate">개봉일:' + date + '</div>';
+          txt += '  </div>';
+          /* txt += '  <div class="user_comment" id="uc_'+i+'">';
+          txt += '    <ol>'
+          $(this).children().each(function() {
+            txt += '      <li class="comment">' + $(this).html().replace('<!--[CDATA[', '').replace(']]-->', '') + '</li>';
+          });
+          txt += '    </ol>';
+          txt += '  </div>'; */
+          txt += '</div>';
+        }); 
+        $('#view_ticker').html(txt);
+
+        $('a').attr('target', '_blank');
+	
+        $('.toggle').click(function() {
+          if(!$(this).hasClass('on')) {
+            $('.info').hide('fast');
+            $('.user_comment').hide();
+            $('.toggle').removeClass('on');
+          }
+          var id = $(this).attr('id').match(/\d+/)[0];
+          //$('#uc_'+id).toggle();
+          
+          if($(this).hasClass('on')) {
+            $(this).removeClass('on');
+            $('#info_'+id).hide('fast');
+          } else {
+            $(this).addClass('on');
+            detail_load($('#info_'+id).attr('movie_url'), $('#info_'+id));
+          }
+        });
+
+        $('.toggle').mouseover(function() {
+          $(this).find('.bg').css('margin-top', '-36px');
+        });
+        $('.toggle').mouseout(function() {
+          $(this).find('.bg').css('margin-top', '-24px');
+        }); 
+      });
+    </script>
+  ]]></Content>
+</Module>
+

@@ -161,11 +161,15 @@
           );
           last.remove();
           
+          
+          target.find('a').attr('target', '_blank');
+	
           target.addClass('loaded');
           target.show('fast');
         });
       }
       
+      // main
       _IG_FetchContent(url, function(e) {
         var txt = '';
         var boxoffice = $(e).find('.list_ranking:not(.bt_8e8e8e)') // current list

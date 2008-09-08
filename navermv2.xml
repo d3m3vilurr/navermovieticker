@@ -19,9 +19,21 @@
       html {
         padding: 5px;
       }
+      
+      body {
+        height: 100%;
+      }
       span {
         margin-left: 2px;
         margin-right: 2px;
+      }
+      img {
+        border: 0;
+      }
+      #view_ticker {
+        height: 190px;
+        overflow-y: scroll;
+        
       }
       .item {
         margin-bottom: 5px;
@@ -72,8 +84,9 @@
       .info {
         clear: both;
         border: 1px solid gray;
-        float: right;
-        width: 100%;
+        float: center;
+        width: 95%;
+        height: 150px;
         margin-top: 5px;
         margin-right: 5px;
         padding: 5px;
@@ -81,6 +94,8 @@
       
       .info .poster {
         float: left;
+        margin-left: 2px;
+        margin-right: 2px;
       }
       .on .bg {
         margin-left: -12px;
@@ -136,7 +151,9 @@
           var grade = detail(summary.eq(3), 'grade');
           
           var html = '';
-          html += '<div class="poster"><img height="151" width="105" src="'+poster+'" alt="poster" /></div>';
+          html += '<div class="poster">';
+          html += '  <img height="151" width="105" src="'+poster+'" alt="poster" />';
+          html += '</div>';
           html += '<div class="basic_info">기본정보 : ' + info + '</div>';
           html += '<div class="areas">지역 : </div>';
           html += '<div class="open">개봉일 : </div>';
@@ -194,17 +211,8 @@
           txt += '  </div>';
           
           txt += '  <div class="info" id="info_'+i+'" movie_url="'+movie_url+'">';
-          //txt += '    <div class="basic_info">' + info + '</div>';
-          //txt += '    <div class="showtime">' + $(this).attr('showtime') + '분</div>';
-          //txt += '    <div class="opendate">개봉일:' + date + '</div>';
           txt += '  </div>';
-          /* txt += '  <div class="user_comment" id="uc_'+i+'">';
-          txt += '    <ol>'
-          $(this).children().each(function() {
-            txt += '      <li class="comment">' + $(this).html().replace('<!--[CDATA[', '').replace(']]-->', '') + '</li>';
-          });
-          txt += '    </ol>';
-          txt += '  </div>'; */
+          
           txt += '</div>';
         }); 
         $('#view_ticker').html(txt);
@@ -218,7 +226,6 @@
             $('.toggle').removeClass('on');
           }
           var id = $(this).attr('id').match(/\d+/)[0];
-          //$('#uc_'+id).toggle();
           
           if($(this).hasClass('on')) {
             $(this).removeClass('on');
